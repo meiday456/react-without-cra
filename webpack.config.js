@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
             filename: 'bundle.[hash].js',
         },
         devServer: {
-            port: '5100',               //port 5000으로 open
+            port: '5100',               //
             static: {
                 directory: path.join(__dirname, 'public')   //정적 파일 사용 디렉토리 위치 지정
             },
@@ -52,8 +52,19 @@ module.exports = (env, argv) => {
                     use: [{loader: 'style-loader'}, {loader: 'css-loader'}]   //webpack은 배열의 마지막 부터 번들링에 반영한다.
                 },
                 {
+                    test: /\.png|svg|jpg|gif$/,
+                    use: ["file-loader"],
+                },
+                {
                     test: /\.(ts|tsx)$/,
-                    use: ["babel-loader", "ts-loader"],
+                    // use: ["babel-loader", "ts-loader"],
+                    exclude: /node_modules/,
+                    loader: require.resolve("babel-loader"),
+                    // options: {
+                    //     plugins: [
+                    //         !isProduct && require.resolve("react-refresh/babel"),
+                    //     ].filter(Boolean),
+                    // }
                 },
             ],
         },
