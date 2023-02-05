@@ -1,11 +1,18 @@
+
+
 @font-face {
-    font-family: 'Lato-Thin';
-    src : url("../public/font/Lato-Thin.ttf") format('ttf');
+    font-family: 'SassyFrass';
+    src : url("fonts/SassyFrass-Regular.ttf") format('truetype');
+    font-display: fallback;
     font-weight: normal;
     font-style: normal;
 }
 
 body{
     background-color: #BDBDBD;
-    font-family: "Lato-Thin";
+    font-family: "SassyFrass";
+}
+
+body p {
+    font-family: "SassyFrass";
 }

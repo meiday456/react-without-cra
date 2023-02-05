@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //사용하려는 플러그인 import
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -7,9 +8,17 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const appDirectory = fs.realpathSync(process.cwd());
+const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 // __filename : 현재 실행중인 파일 경로
 // __dirname : 현재 실행중인 폴더 경로
 
+const publicUrlOrPath = getPublicUrlOrPath(
+    process.env.NODE_ENV === 'development',
+    require(resolveApp('package.json')).homepage,
+    process.env.PUBLIC_URL
+)
 
 const importPlugins = (isProduct) => {
 
@@ -53,14 +62,19 @@ module.exports = (env, argv) => {
             port: '5100',
             compress: true,
             static: {
-                directory: path.join(__dirname, 'public')   //정적 파일 사용 디렉토리 위치 지정
+                directory: path.join(__dirname, 'public'),   //정적 파일 사용 디렉토리 위치 지정
+                publicPath: [publicUrlOrPath],
             },
             open: 'Google Chrome',                 //브라우저가 우리의 파일을 번들한 후 자동으로 열기
             hot: true,                  //AP 구동중 module 교체 , 추가, 제거에 대해서 전체 리로드없이 가능하게 하는옵션
             liveReload: true,           //자동으로 화면에서 reload하는 설정
         },
         resolve: {
-            modules: ['node_modules'],
+            modules: [ //모듈 내부에서 파일을 찾을 경로 위치 지정
+                path.resolve(__dirname, 'src'),
+                path.resolve(__dirname, 'public'),
+                'node_modules',
+            ],
             extensions: ['.tsx', '.ts', '.js', '.jsx', '.json'],
         },
         module: {       //Loader 웹팩은 오직 javascript와 json 만을 이해한다,
@@ -81,11 +95,24 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                    exclude: /node_modules/,
+                    type: 'asset/resource',
+                },
+                {
                     test: /\.css$/,
+                    exclude: /node_modules/,
                     use: [
-                        !isProduct && {loader: 'style-loader'},
+                        !isProduct && {
+                            loader: 'style-loader'
+                        },
                         isProduct &&
-                            {loader: MiniCssExtractPlugin.loader , options : { publicPath: '' }},
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            // options: {
+                            //     publicPath: path.resolve(__dirname, './media/')
+                            // }
+                        },
                         {loader: 'css-loader'},
                         {loader: require.resolve('postcss-loader'),}
                     ].filter(Boolean)   //webpack은 배열의 마지막 부터 번들링에 반영한다.
@@ -98,31 +125,12 @@ module.exports = (env, argv) => {
                         "sass-loader"
                     ]
                 },
-                // {
-                //     test: /\.(ico|png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/,
-                //     type: 'asset/resource'
-                // },
-                {
-                    test: /\.(eot|woff|woff2|ttf)$/,
-                    use : {
-                        loader : 'url-loader',
-                        options : {
-                            limit : 30000,
-                            name : '[name]-[hash].[ext]'
-                        }
-                    }
-                },
                 {
                     test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-                    type: 'asset'
-                    // use: {
-                    //     loader: 'url-loader',
-                    //     options: {
-                    //         publicPath: '/dist/media',
-                    //         name: '/media/[name][ext]',
-                    //         limit: 50000
-                    //     }
-                    // },
+                    type: 'asset',
+                    generator: {
+                        filename: './media/[name][ext]',
+                    }
                 },
                 {
                     test: /\.(ts|tsx)$/,
@@ -135,15 +143,6 @@ module.exports = (env, argv) => {
                     //     ].filter(Boolean),
                     // }
                 },
-                {
-                    test: /\.(jpeg|png|ico)$/,
-                    loader: "file-loader",
-                    options: {
-                        publicPath: "./",
-                        name: "[name].[ext]"
-                    }
-                }
-
             ],
         },
         plugins: [  //webpack과 함께 사용할 플러그인을지정
@@ -168,9 +167,6 @@ module.exports = (env, argv) => {
             minimizer: [
                 new TerserPlugin({
                     parallel: true,
-                    terserOptions: {
-                        // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-                    },
                 }),
             ],
             //모듈 id 를 선택할때의 알고리즘 선택,
