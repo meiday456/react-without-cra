@@ -1,22 +1,20 @@
-import React from "react";
-import {useState} from "react";
+import React, { type ReactElement, useState } from 'react'
 
-const Count = () => {
+const Count = (): ReactElement => {
+  const [count, setCount] = useState(0)
 
-    const [count, setCount] = useState(0)
+  function square (n: number): number {
+    return n * n
+  }
 
-    function square(n: number): number {
-        return n * n
-    }
-
-    return (
+  return (
         <div>
             {count}
-            <button onClick={() => setCount(pre => pre + 1)}>카운트</button>
+            {square(1)}
+            <button onClick={() => { setCount(pre => pre + 1) }}>카운트</button>
         </div>
 
-    )
+  )
 }
-
 
 export default Count
