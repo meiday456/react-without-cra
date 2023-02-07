@@ -14,8 +14,7 @@ const Count = (): ReactElement => {
       <button
         onClick={() => {
           setCount((pre) => pre + 1);
-        }}
-      >
+        }}>
         카운트
       </button>
     </div>
