@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "SassyFrass";
+  font-family: SassyFrass;
   src: url("fonts/SassyFrass-Regular.ttf") format("truetype");
   font-display: fallback;
   font-weight: normal;
@@ -8,9 +8,9 @@
 
 body {
   background-color: #bdbdbd;
-  font-family: "SassyFrass";
+  font-family: SassyFrass, sans-serif;
 }
 
 body p {
-  font-family: "SassyFrass";
+  font-family: SassyFrass, sans-serif;
 }
