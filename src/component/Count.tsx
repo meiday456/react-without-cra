@@ -2,7 +2,6 @@ import React, { type ReactElement, useState } from "react";
 
 const Count = (): ReactElement => {
   const [count, setCount] = useState(0);
-
   function square(n: number): number {
     return n * n;
   }
