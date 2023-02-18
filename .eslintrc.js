@@ -10,12 +10,12 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   extends: [
     "eslint:recommended",
+    "plugin:prettier/recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/recommended",
     "standard-with-typescript",
-    "plugin:prettier/recommended",
     "eslint-config-prettier",
     "prettier",
   ],
@@ -38,7 +38,7 @@ module.exports = {
     project: ["./tsconfig.json"],
     tsconfigRootDir: __dirname,
   },
-  plugins: ["@typescript-eslint", "react"],
+  plugins: ["react"],
   rules: {
     "import/no-unresolved": "error",
   },
