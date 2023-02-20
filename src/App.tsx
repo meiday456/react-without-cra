@@ -8,8 +8,10 @@ const App = (): ReactElement => {
     <h1>
       Hello world! without cra create app!
       <p>font style check</p>
-      <Count />
-      <img src={SampleImage} alt="도로 이미지" style={{ width: "200px" }} />
+      <div className={"main"}>
+        <Count />
+        <img src={SampleImage} alt="도로 이미지" style={{ width: "200px" }} />
+      </div>
     </h1>
   );
 };

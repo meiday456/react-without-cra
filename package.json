@@ -19,8 +19,10 @@
     "babel-preset-react-app": "^10.0.1",
     "react": "^18.2.0",
     "react-router-dom": "^6.8.0",
-    "reactdom": "^2.0.0"
+    "reactdom": "^2.0.0",
+    "sass": "^1.58.3"
   },
+
   "devDependencies": {
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
@@ -37,6 +39,7 @@
     "babel-loader": "^9.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^4.2.2",
     "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^34.0.0",

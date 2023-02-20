@@ -1,16 +1,14 @@
 import React, { type ReactElement, useState } from "react";
+import "../css/count.scss";
 
 const Count = (): ReactElement => {
   const [count, setCount] = useState(0);
-  function square(n: number): number {
-    return n * n;
-  }
 
   return (
-    <div>
+    <div className={"container"}>
       {count}
-      {square(1)}
       <button
+        className={"btn"}
         onClick={() => {
           setCount((pre) => pre + 1);
         }}>
