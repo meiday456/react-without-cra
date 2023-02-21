@@ -13,8 +13,6 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const appDirectory = fs.realpathSync(process.cwd());
 const getPublicUrlOrPath = require("react-dev-utils/getPublicUrlOrPath");
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
-// __filename : 현재 실행중인 파일 경로
-// __dirname : 현재 실행중인 폴더 경로
 
 const publicUrlOrPath = getPublicUrlOrPath(
   process.env.NODE_ENV === "development",
@@ -124,19 +122,28 @@ module.exports = (env, argv) => {
           test: /\.css$/,
           exclude: /node_modules/,
           use: [
-            !isProduct && {
-              loader: "style-loader",
-            },
-            isProduct && {
-              loader: MiniCssExtractPlugin.loader,
-            },
+            !isProduct ? "style-loader" : MiniCssExtractPlugin.loader,
             { loader: "css-loader" },
             { loader: require.resolve("postcss-loader") },
-          ].filter(Boolean), //webpack은 배열의 마지막 부터 번들링에 반영한다.
+          ],
         },
         {
           test: /\.s[ac]ss$/i,
-          use: ["style-loader", "css-loader", "sass-loader"],
+          use: [
+            !isProduct ? "style-loader" : MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
         },
         {
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -147,14 +154,9 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.(ts|tsx)$/,
-          // use: ["babel-loader", "ts-loader"],
+          use: ["ts-loader"],
           exclude: /node_modules/,
-          loader: require.resolve("babel-loader"),
-          // options: {
-          //     plugins: [
-          //         !isProduct && require.resolve("react-refresh/babel"),
-          //     ].filter(Boolean),
-          // }
+          // loader: require.resolve("babel-loader"),
         },
       ],
     },
@@ -176,6 +178,7 @@ module.exports = (env, argv) => {
       }),
       new BundleAnalyzerPlugin(),
       // new CleanWebpackPlugin(),
+
       ...importPlugins(isProduct),
     ].filter(Boolean),
     optimization: {
