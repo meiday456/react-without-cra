@@ -1,6 +1,6 @@
 @font-face {
   font-family: SassyFrass;
-  src: url("fonts/SassyFrass-Regular.ttf") format("truetype");
+  src: url("template/public/fonts/SassyFrass-Regular.ttf") format("truetype");
   font-display: fallback;
   font-weight: normal;
   font-style: normal;
